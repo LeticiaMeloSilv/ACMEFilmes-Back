@@ -51,22 +51,35 @@ const insertFilme = async function (dadosFilme) {
 //funcao para atualizar um filme no BD
 const updateFilme = async function (id, dadoAtualizado) {
     let sql;
+
     try {
-        sql = `UPDATE tbl_filme
-          SET
-            nome = ${dadoAtualizado.nome},
-            sinopse=${dadoAtualizado.sinopse}
-            duracao=${dadoAtualizado.duracao},
-            data_lancamento=${dadoAtualizado.data_lancamento},
-            data_relancamento=${dadoAtualizado.data_relancamento}
-            foto_capa=${dadoAtualizado.foto_capa},
-            valor_unitario=${dadoAtualizado.valor_unitario}
-          WHERE
-            id = ${id}`
-
-
+        if (dadoAtualizado.data_relancamento != '' && dadoAtualizado.data_relancamento != null && dadoAtualizado.data_relancamento != undefined) {
+            sql = `UPDATE tbl_filme
+                SET
+                    nome = '${dadoAtualizado.nome}',
+                    sinopse='${dadoAtualizado.sinopse}',
+                    duracao='${dadoAtualizado.duracao}',
+                    data_lancamento='${dadoAtualizado.data_lancamento}',
+                    data_relancamento='${dadoAtualizado.data_relancamento}',
+                    foto_capa='${dadoAtualizado.foto_capa}',
+                    valor_unitario='${dadoAtualizado.valor_unitario}'
+                WHERE
+                    id = ${id}`
+        }
+        else {
+            sql = `UPDATE tbl_filme
+        SET
+        nome = '${dadoAtualizado.nome}',
+        sinopse='${dadoAtualizado.sinopse}',
+        duracao='${dadoAtualizado.duracao}',
+        data_lancamento='${dadoAtualizado.data_lancamento}',
+        data_relancamento=null,
+        foto_capa='${dadoAtualizado.foto_capa}',
+        valor_unitario='${dadoAtualizado.valor_unitario}'
+        WHERE
+        id = ${id}`
+        }
         let result = await prisma.$executeRawUnsafe(sql)
-
         if (result) {
             return true
         }
